@@ -11,9 +11,9 @@ class Orders(SQLModel, table=True):
     quantity: int = Field(default=1)
 
 
-#DATABASE_URL = "postgresql://postgres:postgres@db/order_db"
+DATABASE_URL = "postgresql+psycopg://postgres:postgres@db/order_db"
 # for localhost
-DATABASE_URL = "postgresql+psycopg://petbell:i12pose@localhost/order_db"
+#DATABASE_URL = "postgresql+psycopg://petbell:i12pose@localhost/order_db"
 engine = create_async_engine(DATABASE_URL, echo=True, # set to false in production
                              future=True)
 # All the jara async session stuff was becuase of async support in sqlmodel
