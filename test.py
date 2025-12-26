@@ -21,7 +21,7 @@ async def get_product(item_id : int):
     for product in products:
         if product.id == item_id:
             return {"products" : product }    
-        return {"products" : "product not found or missing" }
+        return {"products" : "product not found" }
     
 # post a product
 @app.post("/products")
