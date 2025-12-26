@@ -36,7 +36,7 @@ async def delete_products(item_id : int):
         if product.id == item_id:
             products.remove(product)
             return {"products" : "{product} removed" }    
-        return {"products" : "product not found" }
+        return {"products" : "product not found or missing" }
     
 # update a product
 @app.put("/products/{item_id}")
