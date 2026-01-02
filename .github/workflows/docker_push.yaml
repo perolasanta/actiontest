@@ -17,6 +17,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
 
+      - name: Debug secret
+        run: echo "DOCKER_USERNAME is ${{ secrets.DOCKER_USERNAME }}"
+
       - name: Build, tag, and push image to Docker Hub
         uses: dinushchathurya/build-tag-push-action@v1.2.1
 
@@ -27,5 +30,5 @@ jobs:
           file: Dockerfile
           repoOwner: ${{ secrets.DOCKER_USERNAME }}
           repository:  fastapi3tier
-          tag: ${{ secrets.DOCKER_USERNAME }}/fastapi3tier:latest
+          tag: latest
           
