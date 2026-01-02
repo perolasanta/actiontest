@@ -19,6 +19,7 @@ jobs:
 
       - name: Debug secret
         #if: ${{ secrets.DOCKER_USERNAME != ''}}
+        # Editted to avoid printing secret directly
         run: |
               if [ -z "${{ secrets.DOCKER_USERNAME }}" ]; then
                 echo "DOCKER_USERNAME is not set";
