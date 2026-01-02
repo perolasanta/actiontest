@@ -18,8 +18,8 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Debug secret
-        if: ${{ secrets.DOCKER_USERNAME != ''}}
-        run: echo "DOCKER_USERNAME is set!" 
+        #if: ${{ secrets.DOCKER_USERNAME != ''}}
+        run: echo "DOCKER_USERNAME is set: ${{ secrets.DOCKER_USERNAME }}" | sed 's/./&/g'
 
       - name: Build, tag, and push image to Docker Hub
         uses: dinushchathurya/build-tag-push-action@v1.2.1
