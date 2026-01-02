@@ -19,7 +19,13 @@ jobs:
 
       - name: Debug secret
         #if: ${{ secrets.DOCKER_USERNAME != ''}}
-        run: echo "DOCKER_USERNAME is set: ${{ secrets.DOCKER_USERNAME }}" | sed 's/./&/g'
+        run: |
+              if [ -z "${{ secrets.DOCKER_USERNAME }}" ]; then
+                echo "DOCKER_USERNAME is not set";
+              else
+                echo "DOCKER_USERNAME is set";
+              fi
+        #echo "DOCKER_USERNAME is set: ${{ secrets.DOCKER_USERNAME }}" | sed 's/./&/g'
 
       - name: Build, tag, and push image to Docker Hub
         uses: dinushchathurya/build-tag-push-action@v1.2.1
@@ -31,5 +37,5 @@ jobs:
           file: Dockerfile
           repoOwner: ${{ secrets.DOCKER_USERNAME }}
           repository:  fastapi3tier
-          tag: ${{github.event.release.tag_name||latest}}
+          tag: latest
           
