@@ -43,7 +43,7 @@ jobs:
           context: .
           push: true
           file: Dockerfile
-          repoOwner: ${{ secrets.DOCKER_USERNAME }}
-          repository:  fastapi3tier
-          tag: latest
+          #repoOwner: ${{ secrets.DOCKER_USERNAME }}
+          #repository:  fastapi3tier
+          tags: ${{ secrets.DOCKER_USERNAME }}/fastapi3tier:latest
           
