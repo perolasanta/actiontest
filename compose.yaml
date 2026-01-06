@@ -24,7 +24,8 @@ services:
       db:
         condition: service_healthy
   db:
-    image: postgres
+    image: postgres:17.7-alpine
+    #postgres 18+ stores volume mount in /var/lib/postgresql 
     restart: always
     user: postgres
     secrets:
@@ -56,7 +57,7 @@ services:
       db:
         condition: service_healthy
   nginx:
-    image: nginx:alpine
+    image: nginx:1.29.4-alpine
     restart: unless-stopped
     ports:
       - 80:80

@@ -1,0 +1,75 @@
+---
+replicaCount: 3
+
+image:
+  repository: petbell/flaskapp
+  tag: 5bedca4
+  pullPolicy: IfNotPresent
+
+service:
+  type: NodePort
+  port: 80
+  targetPort: 5000
+#====================================
+server:
+  repository: petbell/fastapi-3tier-app
+  tag: "latest"
+  replicaCount: 3
+  service:
+    type: ClusterIP
+    port: 80
+    targetPort: 8000 # Must match with container port in deployment
+  #port: 8000
+
+db:
+  image: postgres
+  tag: "17.7-alpine"
+  service:
+    type: ClusterIP
+  port: 5432
+  targetPort: 5432 
+  username: "postgres"
+  password: "postgres"
+  database: "order_db"
+  host: "{{ .Release.Name }}-db-svc"
+  storage:
+    size: 10Gi
+  
+  # Uncomment the following lines to enable persistent storage for the database
+  persistence:
+     enabled: true
+     accessModes:
+       - ReadWriteOnce
+     size: 10Gi    
+
+adminer:
+  image: adminer
+  tag: "latest"
+  service:
+    port: 8080
+
+nginx:
+  replicaCount: 1
+  service:
+    type: NodePort # since nginx is the entry point and on prem. Use LoadBalancer for cloud
+    port: 80
+    targetPort: 80
+  image: nginx
+  tag: "1.29.4-alpine"
+  port: 80
+  ingress:
+    enabled: true
+    hosts:
+      - host: fastapi3tier.local
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+
+# containerPort also means the port exposed inside the pod
+# service.port is the port exposed by the service within the cluster
+# service.targetPort is the port on which the container is listening  
+# containerPort must match service.targetPort
+# containerPort does not have to match service.port
+# containerPort does not have to match NodePort
+# service.type can be ClusterIP, NodePort, LoadBalancer
+# containerPort is also the port defined in dockerfile EXPOSE and app code

@@ -1,0 +1,44 @@
+server:
+  repository: petbell/fastapi-3tier-app
+  tag: "latest"
+  replicaCount: 3
+  service:
+    port: 8000
+  port: 8000
+
+db:
+  image: postgres:17.7-alpine
+  port: 5432
+  username: postgres
+  password: mysecretpassword
+  database: order_db
+  storage:
+    size: 10Gi
+  
+  # Uncomment the following lines to enable persistent storage for the database
+  # persistence:
+  #   enabled: true
+  #   accessModes:
+  #     - ReadWriteOnce
+  #   size: 10Gi    
+
+adminer:
+  image: adminer
+  tag: "latest"
+  service:
+    port: 8080
+
+nginx:
+  replicaCount: 2
+  service:
+    port: 80
+  image: nginx
+  tag: "1.29.4-alpine"
+  port: 80
+  ingress:
+    enabled: true
+    hosts:
+      - host: fastapi3tier.local
+        paths:
+          - path: /
+            pathType: ImplementationSpecific

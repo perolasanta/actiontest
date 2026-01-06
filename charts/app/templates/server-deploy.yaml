@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-server-deploy
+spec:
+  replicas: {{ .Values.server.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: flask-container
+          image: "{{ .Values.server.repository }}:{{ .Values.server.tag }}"
+          env:
+            - name: DB_HOST
+              value: "{{ .Values.db.host }}"
+            - name: DB_PORT
+              value: "{{ .Values.db.port | quote }}"
+            - name: DB_NAME
+              value: "{{ .Values.db.database }}"
+            - name: DB_USER
+              value: "{{ .Values.db.username }}"
+            - name: DB_PASSWORD
+              value: "{{ .Values.db.password }}"
+            - name: DATABASE_URL
+              value: "postgresql://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)"
+          ports:
+            - containerPort: {{ .Values.server.service.targetPort }}
